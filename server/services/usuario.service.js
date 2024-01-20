@@ -1,10 +1,10 @@
 const db = require('../configs/db.config');
 
-const create = async ({ name, description, price, imageUrl }) => {
+const create = async ({name, pass}) => {
     const connection = await db.createConnection();
-    const query = "INSERT INTO products (name, description, price, image_url) VALUES (?, ?, ?, ?)"
+    const query = "INSERT INTO usuarios (name, pass) VALUES (?,?)"
 
-    const result = await connection.run(query, name, description, price, imageUrl);
+    const result = await connection.run(query, name, pass);
     connection.close();
 
     if (result.lastID == 0) {
@@ -14,11 +14,12 @@ const create = async ({ name, description, price, imageUrl }) => {
     return result;
 }
 
-const getAll = async () => {
+const getUser = async ({name, pass}) => {
+    console.log(name, pass);
     const connection = await db.createConnection();
-    const query = "SELECT id, name, description, price, image_url FROM products";
+    const query = "SELECT id, name, pass FROM usuarios where name= ? and pass= ?";
 
-    const result = await connection.all(query);
+    const result = await connection.all(query, name, pass);
     connection.close();
 
     return result;
@@ -63,9 +64,9 @@ const deleteById = async (id) => {
 }
 
 module.exports = {
-    getAll,
-    getById,
     create,
+    getUser,
+    getById,
     update,
     delete: deleteById,
 }

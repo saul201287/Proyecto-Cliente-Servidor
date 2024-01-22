@@ -3,8 +3,14 @@ POST http://localhost:3000/usuarios/ HTTP/1.1
 Content-Type: application/json
 
 {
-"name": "saul",
+"name": "dani",
 "pass": "123123"
 }
+
 ###
 GET http://localhost:3000/usuarios/saul&123123 HTTP/1.1
+
+###
+GET http://localhost:3000/usuarios/notificacion/saul HTTP/1.1
+###
+POST  http://localhost:3000/usuarios/saul HTTP/1.1

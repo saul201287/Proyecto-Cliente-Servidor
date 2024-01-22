@@ -2,9 +2,9 @@ const router = require("express").Router();
 const usuario = require('../controllers/usuario.controller');
 
 router.post('/', usuario.create);
+router.post("/:name",usuario.postUsuario)
 router.get('/:name&:pass', usuario.getAll);
-router.get('/:id', usuario.getById);
-router.patch('/:id', usuario.update);
-router.delete('/:id', usuario.delete);
+router.get('/notificacion', usuario.getNotification);
+router.get('/notificacionNew', usuario.getNotificationNew);
 
 module.exports = router;

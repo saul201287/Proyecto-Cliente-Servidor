@@ -15,7 +15,6 @@ const create = async ({name, pass}) => {
 }
 
 const getUser = async ({name, pass}) => {
-    console.log(name, pass);
     const connection = await db.createConnection();
     const query = "SELECT id, name, pass FROM usuarios where name= ? and pass= ?";
 

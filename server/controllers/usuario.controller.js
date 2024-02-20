@@ -1,74 +1,88 @@
-const usuarioServices = require('../services/usuario.service');
-const usuarios = []
+const usuarioServices = require("../services/usuario.service");
+let usuarios = [];
 let responsesClientes = [];
-const create = async (req, res) => {
-    try {
-        await usuarioServices.create(req.body);
 
-        return res.status(201).json({
-            message: "usuario creado exitosamente"
-        })
-    } catch (error) {
-        return res.status(500).json({
-            message: "ocurrió un error al crear el usuario",
-            error: error.message
-        });
+const create = async (req, res) => {
+  try {
+    const result = await usuarioServices.create(req.body);
+    if (result) {
+      return res.status(201).json({
+        success: true,
+        message: "usuario registrado",
+      });
+    } else {
+      return res.status(401).json({
+        success: false,
+        message: "usuario no registrado",
+      });
     }
-}
+  } catch (error) {
+    return res.status(500).json({
+      message: "ocurrió un error al crear el usuario",
+      error: error.message,
+    });
+  }
+};
 
 const getAll = async (req, res) => {
-    try {
-        const products = await usuarioServices.getUser(req.params);
+  res.status(200).json({
+    usuarios,
+  });
+};
 
-        return res.status(200).json({
-            message: "usuario obtenido exitosamente",
-            data: products
-        });
-    } catch (error) {
-        return res.status(500).json({
-            message: "ocurrió un error al consultar los usuarios",
-            error: error.message
-        });
-    }
-}
-
-const getNotification = async (req, res) => {
-
-        res.status(200).json({
-            success: true,
-            usuario : usuarios
-        });
-}
 const getNotificationNew = async (req, res) => {
-   responsesClientes.push(req.params.user)
-}
-function responderClientes(usuario) {
-    for (res of responsesClientes) {
-        res.status(200).json({
-            success: true,
-            usuario
-        });
-    }
+  responsesClientes.push(res);
+};
 
-    responsesClientes = [];
-}
-const postUsuario = async (req, res) => {
-    const usuario = {
-        name: req.params.name
-    }
-    usuarios.push(usuario)
-    responderClientes(usuario)
-    return res.status(201).json({
-        success: true,
-        message: "cliente guardado"
+function responderClientes() {
+  for (res of responsesClientes) {
+    res.status(200).json({
+      success: true,
+      usuarios:usuarios,
     });
+  }
+
+  responsesClientes = [];
 }
 
+const sesion = async (req, res) => {
+  try {
+    const user = await usuarioServices.getUser(req.params);
+    if (user) {
+      usuarios.push(user[0].name);
+      responderClientes();
+      return res.status(200).json({
+        success: true,
+        message: "usuario obtenido exitosamente",
+        name: user[0].name,
+      });
+    } else {
+      return res.status(401).json({
+        success: false,
+        message: "usuario no obtenido",
+      });
+    }
+  } catch (error) {
+    return res.status(500).json({
+      message: "ocurrió un error al consultar los usuarios",
+      error: error.message,
+    });
+  }
+};
 
+const exitUser = async (req, res) => {
+  usuarios = usuarios.filter((elemento) => elemento !== req.params.user);
+  responderClientes()
+  return res.json({
+    success: true,
+    message: "Usuario eliminado",
+    usuarios,
+  });
+};
 module.exports = {
-    create,
-    getAll,
-    getNotification,
-    getNotificationNew,
-    postUsuario
-}
+  create,
+  getAll,
+  getNotificationNew,
+  sesion,
+  exitUser,
+};

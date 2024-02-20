@@ -8,7 +8,7 @@ const create = async ({name, pass}) => {
     connection.close();
 
     if (result.lastID == 0) {
-        throw new Error("Producto no insertado");
+        throw new Error("Usuario no insertado");
     }
 
     return result;

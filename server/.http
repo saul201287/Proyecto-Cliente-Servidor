@@ -1,0 +1,27 @@
+###
+POST http://localhost:3000/tareas/ HTTP/1.1
+Content-Type: application/json
+
+{
+"titulo": "Avanzes",
+"descripcion": "Avanzes de los planos de la construccion",
+"fechaL": "2024/01/12",
+"usuario":"dani"
+}
+###
+POST http://localhost:3000/usuarios/ HTTP/1.1
+Content-Type: application/json
+
+
+{
+"name": "Profe",
+"pass":123123 
+}
+###
+GET  http://localhost:3000/tareas/ HTTP/1.1
+
+###
+GET  http://localhost:3000/tareas/saul HTTP/1.1
+
+###
+DELETE   http://localhost:3000/tareas/3 HTTP/1.1

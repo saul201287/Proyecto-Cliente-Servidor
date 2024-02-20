@@ -10,7 +10,6 @@ const createConnection = async () => {
       driver: sqlite3.Database,
     })
   };
-
 module.exports = {
   createConnection,
 };
